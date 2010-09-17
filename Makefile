@@ -26,12 +26,26 @@ INSTALL_PROGRAM := $(INSTALL)
 INSTALL_DATA := $(INSTALL) -m 644
 
 bundle := phst
-destdir := ~/.emacs.d/auctex/style/$(bundle)
-sources := *.el
+destdir_man := ~/.emacs.d/auctex/style/$(bundle)
+destdir_auto := $(destdir_man)/expl3-autogen
+sources_man := *.el
+sources_auto := expl3/*.el
+sources := $(sources_man) $(sources_auto)
 
 
-install: $(sources)
-	$(INSTALL) -d $(destdir)
-	for file in $? ; do $(INSTALL_DATA) $$file $(destdir) ; done
+all: auto
+
+auto:
+	./latex3-autogen.py
+
+install: all install-man install-auto
+
+install-man: $(sources_man)
+	$(INSTALL) -d $(destdir_man)
+	for file in $? ; do $(INSTALL_DATA) $$file $(destdir_man) ; done
+
+install-auto: $(sources_auto)
+	$(INSTALL) -d $(destdir_auto)
+	for file in $? ; do $(INSTALL_DATA) $$file $(destdir_auto) ; done
 
 .SUFFIXES:
