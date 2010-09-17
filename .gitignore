@@ -1,3 +1,4 @@
 auto/
 .DS_Store
 *~
+*.log

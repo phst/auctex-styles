@@ -46,28 +46,28 @@
      "vmodeif" "hmodeif" "mmodeif" "innerif"
      "voidif" "hboxif" "vboxif"
      "xif" "eofif" "trueif" "falseif" "caseif"
-     "definedif" "csnameif" "fontcharif")
-    (append
-     (mapcar
-      (lambda (name)
-        (list name 'TeX-arg-define-macro))
-      '("globcount" "loccount"
-        "globdimen" "locdimen"
-        "globskip" "locskip"
-        "globmuskip" "locmuskip"
-        "globbox" "locbox"
-        "globtoks" "loctoks"
-        "globmarks" "locmarks" "newmarks"))
-     (mapcar
-      (lambda (name)
-        (list name 'TeX-arg-define-macro "Size"))
-      '("globcountblk" "loccountblk"
-        "globdimenblk" "locdimenblk"
-        "globskipblk" "locskipblk"
-        "globmuskipblk" "locmuskipblk"
-        "globboxblk" "locboxblk"
-        "globtoksblk" "loctoksblk"
-        "globmarksblk" "locmarksblk"))))))
+     "definedif" "csnameif" "fontcharif"
+     (append
+      (mapcar
+       (lambda (name)
+         (list name 'TeX-arg-define-macro))
+       '("globcount" "loccount"
+         "globdimen" "locdimen"
+         "globskip" "locskip"
+         "globmuskip" "locmuskip"
+         "globbox" "locbox"
+         "globtoks" "loctoks"
+         "globmarks" "locmarks" "newmarks"))
+      (mapcar
+       (lambda (name)
+         (list name 'TeX-arg-define-macro "Size"))
+       '("globcountblk" "loccountblk"
+         "globdimenblk" "locdimenblk"
+         "globskipblk" "locskipblk"
+         "globmuskipblk" "locmuskipblk"
+         "globboxblk" "locboxblk"
+         "globtoksblk" "loctoksblk"
+         "globmarksblk" "locmarksblk")))))))
 
 (defvar LaTeX-etex-package-options
   '("grouptypes" "interactionmodes" "nodetypes" "iftypes"
