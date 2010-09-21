@@ -21,16 +21,23 @@
 ;; DEALINGS IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "expl3"
+ "l3keyval-autogen"
  (function
   (lambda ()
-    (TeX-run-style-hooks
-     "l3names" "etex"
-     "l3basics" "l3expan" "l3tl" "l3intexpr" "l3quark" "l3seq" "l3toks"
-     "l3int" "l3prg" "l3clist" "l3token" "l3prop" "l3msg" "l3io" "l3skip"
-     "l3box" "l3keyval" "l3keys" "l3precom" "l3xref" "l3file" "l3fp" "l3luatex"
-     "calc"))))
-
-(defvar LaTeX-expl3-package-options
-  '("check-declarations" "log-functions")
-  "Package options for the expl3 package.")
+    (TeX-add-symbols
+     '("KV_parse_no_space_removal_no_sanitize:n" "keyval list")
+     '("KV_parse_space_removal_no_sanitize:n" "keyval list")
+     '("KV_parse_space_removal_sanitize:n" "keyval list")
+     '("KV_sanitize_outerlevel_active_equals:N" TeX-arg-macro)
+     '("KV_sanitize_outerlevel_active_commas:N" TeX-arg-macro)
+     "KV_split_key_value_current:w"
+     "KV_split_key_value_space_removal:w"
+     "KV_split_key_value_space_removal_detect_error:wTF"
+     "KV_split_key_value_no_space_removal:w"
+     "l_KV_remove_one_level_of_braces_bool"
+     "c_KV_single_equal_sign_tl"
+     "l_KV_tmpa_tl"
+     "l_KV_tmpb_tl"
+     "l_KV_parse_tl"
+     "l_KV_currkey_tl"
+     "l_KV_currval_tl"))))

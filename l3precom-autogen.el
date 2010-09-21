@@ -21,16 +21,22 @@
 ;; DEALINGS IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "expl3"
+ "l3precom-autogen"
  (function
   (lambda ()
-    (TeX-run-style-hooks
-     "l3names" "etex"
-     "l3basics" "l3expan" "l3tl" "l3intexpr" "l3quark" "l3seq" "l3toks"
-     "l3int" "l3prg" "l3clist" "l3token" "l3prop" "l3msg" "l3io" "l3skip"
-     "l3box" "l3keyval" "l3keys" "l3precom" "l3xref" "l3file" "l3fp" "l3luatex"
-     "calc"))))
-
-(defvar LaTeX-expl3-package-options
-  '("check-declarations" "log-functions")
-  "Package options for the expl3 package.")
+    (TeX-add-symbols
+     '("cs_gen_sym:N" TeX-arg-macro)
+     '("cs_ggen_sym:N" TeX-arg-macro)
+     '("cs_record_name:N" TeX-arg-macro)
+     '("cs_record_name:c" "arg1")
+     '("cs_record_meaning:N" TeX-arg-macro)
+     '("register_record_name:N" TeX-arg-macro)
+     '("cs_load_dump:n" "file name")
+     "dumpLaTeXstate"
+     "g_gen_sym_num"
+     "g_ggen_sym_num"
+     "g_cs_dump_seq"
+     "g_cs_dump_stream"
+     "g_cs_dump_name_tl"
+     "g_cs_trace_seq"
+     "g_register_trace_seq"))))

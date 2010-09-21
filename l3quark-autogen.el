@@ -21,16 +21,31 @@
 ;; DEALINGS IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "expl3"
+ "l3quark-autogen"
  (function
   (lambda ()
-    (TeX-run-style-hooks
-     "l3names" "etex"
-     "l3basics" "l3expan" "l3tl" "l3intexpr" "l3quark" "l3seq" "l3toks"
-     "l3int" "l3prg" "l3clist" "l3token" "l3prop" "l3msg" "l3io" "l3skip"
-     "l3box" "l3keyval" "l3keys" "l3precom" "l3xref" "l3file" "l3fp" "l3luatex"
-     "calc"))))
-
-(defvar LaTeX-expl3-package-options
-  '("check-declarations" "log-functions")
-  "Package options for the expl3 package.")
+    (TeX-add-symbols
+     '("quark_new:N" TeX-arg-macro)
+     '("quark_if_nil_p:N" TeX-arg-macro)
+     '("quark_if_nil:NT" TeX-arg-macro "true code")
+     '("quark_if_nil:NF" TeX-arg-macro "false code")
+     '("quark_if_nil:NTF" TeX-arg-macro "true code" "false code")
+     '("quark_if_nil_p:n" "arg1")
+     '("quark_if_nil_p:V" TeX-arg-macro)
+     '("quark_if_nil_p:o" TeX-arg-macro)
+     '("quark_if_nil:nT" "tokens" "true code")
+     '("quark_if_nil:nF" "tokens" "false code")
+     '("quark_if_nil:nTF" "tokens" "true code" "false code")
+     '("quark_if_nil:VT" TeX-arg-macro "arg2")
+     '("quark_if_nil:VF" TeX-arg-macro "arg2")
+     '("quark_if_nil:VTF" TeX-arg-macro "arg2" "arg3")
+     '("quark_if_nil:oT" TeX-arg-macro "arg2")
+     '("quark_if_nil:oF" TeX-arg-macro "arg2")
+     '("quark_if_nil:oTF" TeX-arg-macro "arg2" "arg3")
+     "q_recursion_tail"
+     "q_recursion_stop"
+     "q_no_value"
+     "q_stop"
+     "q_nil"
+     "q_error"
+     "q_mark"))))

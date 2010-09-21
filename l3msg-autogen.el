@@ -21,20 +21,43 @@
 ;; DEALINGS IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "l3names"
+ "l3msg-autogen"
  (function
   (lambda ()
-    (TeX-run-style-hooks "luatex" "pdftexcmds" "l3names-autogen")
     (TeX-add-symbols
-     "ExplSyntaxOn" "ExplSyntaxOff" "ExplSyntaxStatus"
-     "ExplSyntaxNamesOn" "ExplSyntaxNamesOff"
-     "GetIdInfo"
-     "filename" "fileversion" "filedescription" "fileauthor"
-     "filenameext" "filedate" "filetimestamp"
-     '("ProvidesExplPackage" "Name" "Date" "Version" "Description")
-     '("ProvidesExplClass" "Name" "Date" "Version" "Description")
-     '("ProvidesExplFile" "Name" "Date" "Version" "Description")))))
-
-(defvar LaTeX-l3names-package-options
-  '("removeoldnames" "keepoldnames")
-  "Package options for the l3names package.")
+     '("msg_class_new:nn" "arg1" "arg2")
+     '("msg_class_set:nn" "arg1" "arg2")
+     '("msg_redirect_class:nn" "arg1" "arg2")
+     '("msg_redirect_name:nnn" "arg1" "arg2" "arg3")
+     "msg_line_context:"
+     "msg_line_number:"
+     "msg_newline:"
+     "msg_two_newlines:"
+     '("msg_generic_new:nnn" "arg1" "arg2" "arg3")
+     '("msg_generic_new:nn" "arg1" "arg2")
+     '("msg_generic_set:nnn" "arg1" "arg2" "arg3")
+     '("msg_generic_set:nn" "arg1" "arg2")
+     '("msg_direct_log:xx" "arg1" "arg2")
+     '("msg_direct_term:xx" "arg1" "arg2")
+     '("msg_kernel_bug:x" "arg1")
+     "c_msg_fatal_tl"
+     "c_msg_error_tl"
+     "c_msg_warning_tl"
+     "c_msg_info_tl"
+     "c_msg_coding_error_text_tl"
+     "c_msg_fatal_text_tl"
+     "c_msg_help_text_tl"
+     "c_msg_kernel_bug_text_tl"
+     "c_msg_kernel_bug_more_text_tl"
+     "c_msg_no_info_text_tl"
+     "c_msg_return_text_tl"
+     "c_msg_on_line_tl"
+     "c_msg_text_prefix_tl"
+     "c_msg_more_text_prefix_tl"
+     "l_msg_class_tl"
+     "l_msg_current_class_tl"
+     "l_msg_current_module_tl"
+     "l_msg_names_clist"
+     "l_msg_redirect_classes_prop"
+     "l_msg_redirect_names_prop"
+     "l_msg_redirect_classes_clist"))))

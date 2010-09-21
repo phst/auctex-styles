@@ -21,16 +21,19 @@
 ;; DEALINGS IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "expl3"
+ "l3file-autogen"
  (function
   (lambda ()
-    (TeX-run-style-hooks
-     "l3names" "etex"
-     "l3basics" "l3expan" "l3tl" "l3intexpr" "l3quark" "l3seq" "l3toks"
-     "l3int" "l3prg" "l3clist" "l3token" "l3prop" "l3msg" "l3io" "l3skip"
-     "l3box" "l3keyval" "l3keys" "l3precom" "l3xref" "l3file" "l3fp" "l3luatex"
-     "calc"))))
-
-(defvar LaTeX-expl3-package-options
-  '("check-declarations" "log-functions")
-  "Package options for the expl3 package.")
+    (TeX-add-symbols
+     '("file_if_exist:nT" "arg1" "arg2")
+     '("file_if_exist:nF" "arg1" "arg2")
+     '("file_if_exist:nTF" "arg1" "arg2" "arg3")
+     '("file_if_exist:VT" TeX-arg-macro "arg2")
+     '("file_if_exist:VF" TeX-arg-macro "arg2")
+     '("file_if_exist:VTF" TeX-arg-macro "arg2" "arg3")
+     '("file_input:n" "arg1")
+     '("file_input:V" TeX-arg-macro)
+     '("file_path_include:n" "arg1")
+     '("file_path_remove:n" "arg1")
+     "file_list:"
+     "g_file_current_name_tl"))))

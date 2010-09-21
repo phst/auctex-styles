@@ -21,16 +21,7 @@
 ;; DEALINGS IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "expl3"
+ "l3toks"
  (function
   (lambda ()
-    (TeX-run-style-hooks
-     "l3names" "etex"
-     "l3basics" "l3expan" "l3tl" "l3intexpr" "l3quark" "l3seq" "l3toks"
-     "l3int" "l3prg" "l3clist" "l3token" "l3prop" "l3msg" "l3io" "l3skip"
-     "l3box" "l3keyval" "l3keys" "l3precom" "l3xref" "l3file" "l3fp" "l3luatex"
-     "calc"))))
-
-(defvar LaTeX-expl3-package-options
-  '("check-declarations" "log-functions")
-  "Package options for the expl3 package.")
+    (TeX-run-style-hooks "l3toks-autogen"))))
