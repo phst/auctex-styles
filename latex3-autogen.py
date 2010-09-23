@@ -2,29 +2,28 @@
 #
 # Copyright (c) 2010, Philipp Stephani <st_philipp@yahoo.de>
 #
-# Permission is hereby granted, free of charge, to any person
-# obtaining a copy of this software and associated documentation files
-# (the "Software"), to deal in the Software without restriction,
-# including without limitation the rights to use, copy, modify, merge,
-# publish, distribute, sublicense, and/or sell copies of the Software,
-# and to permit persons to whom the Software is furnished to do so,
-# subject to the following conditions:
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
-# BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
-# ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-# CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
 import sys
 import copy
 import logging
+import collections
 import string
 import re
 import optparse
@@ -196,15 +195,8 @@ class VariableGroup:
 class File:
     def __init__(self, app, path):
         self.input_file = path
-        self.autogen_template = app.autogen_template
-        self.master_template = app.master_template
         self.indent = app.indent
-        self.autogen_suffix = app.autogen_suffix
         self.package = os.path.splitext(os.path.basename(path))[0]
-        self.autogen_file = (os.path.join
-                             (app.output_dir,
-                              self.package + self.autogen_suffix + ".el"))
-        self.master_file = os.path.join(app.output_dir, self.package + ".el")
         self.text = self.read()
         func_names, syntax = self.get_functions()
         var_names = self.get_variables()
@@ -246,21 +238,6 @@ class File:
             names.extend(group.names)
         return names
 
-    def write(self):
-        if self.names:
-            self.write_autogen_file()
-            if not os.path.exists(self.master_file):
-                self.write_master_file()
-
-    def write_autogen_file(self):
-        logging.info("Writing %d symbols to file %s",
-                     len(self.names), self.autogen_file)
-        symbols = self.make_symbols()
-        with open(self.autogen_file, "wt", encoding="UTF-8") as stream:
-            stream.write(self.autogen_template.substitute
-                         (package=self.package, suffix=self.autogen_suffix,
-                          symbols=symbols))
-
     def make_symbols(self):
         symbols = []
         for name in self.names:
@@ -273,36 +250,54 @@ class File:
             symbols.append(symbol)
         return "\n".join(symbols)
 
-    def write_master_file(self):
-        logging.info("Writing master file %s", self.master_file)
-        with open(self.master_file, "wt", encoding="UTF-8") as stream:
-            stream.write(self.master_template.substitute
-                         (package=self.package, suffix=self.autogen_suffix))
+
+class Collection:
+    def __init__(self, app, name, paths):
+        self.template = app.template
+        self.suffix = app.suffix
+        self.files = [File(app, path) for path in paths]
+        self.name = name or self.files[0].package
+        self.count = sum(len(file.names) for file in self.files)
+        self.output_file = os.path.join(app.output_dir,
+                                        self.name + self.suffix + ".el")
+
+    def write(self):
+        if not self.count:
+            return
+        logging.info("Writing %d symbols to file %s",
+                     self.count, self.output_file)
+        symbols = "\n".join(file.make_symbols() for file in self.files)
+        with open(self.output_file, "wt", encoding="UTF-8") as stream:
+            stream.write(self.template.substitute
+                         (name=self.name, suffix=self.suffix, symbols=symbols))
 
 
 class Application:
     def __init__(self, options):
         logging.basicConfig(level=options.log_level)
-        with open(options.autogen_template, "rt", encoding="UTF-8") as stream:
-            self.autogen_template = string.Template(stream.read())
-        with open(options.master_template, "rt", encoding="UTF-8") as stream:
-            self.master_template = string.Template(stream.read())
+        with open(options.template, "rt", encoding="UTF-8") as stream:
+            self.template = string.Template(stream.read())
         self.input_dir = options.input_dir
         self.output_dir = options.output_dir
-        self.autogen_suffix = options.autogen_suffix
+        self.bundle = options.bundle
+        self.independent = frozenset(options.independent)
+        self.suffix = options.suffix
         self.indent = options.indent * " "
 
     def run(self):
         logging.info("Reading directory %s", self.input_dir)
+        colls = collections.defaultdict(list)
         for fname in os.listdir(self.input_dir):
             stem, ext = os.path.splitext(fname)
             if ext == ".dtx":
                 path = os.path.join(self.input_dir, fname)
-                self.process(path)
-
-    def process(self, path):
-        file = File(self, path)
-        file.write()
+                if stem not in self.independent:
+                    logging.info("Using bundle style for package %s", stem)
+                    stem = self.bundle
+                colls[stem].append(path)
+        for name, paths in colls.items():
+            coll = Collection(self, name, paths)
+            coll.write()
 
 
 def get_input_dir():
@@ -326,12 +321,8 @@ def kpsewhich(fname):
         return None
 
 
-def get_autogen_template():
-    return os.path.join(get_script_dir(), "autogen.el.tpl")
-
-
-def get_master_template():
-    return os.path.join(get_script_dir(), "master.el.tpl")
+def get_template():
+    return os.path.join(get_script_dir(), "latex3-autogen.el.tpl")
 
 
 def get_script_dir():
@@ -359,24 +350,30 @@ def main():
     parser.add_option("-o", "--output-dir", metavar="DIR",
                       help=("place generated files in directory DIR "
                             "[default: %default]"))
-    parser.add_option("-t", "--autogen-template", metavar="FILE",
-                      help=("use FILE as template for auto-generated style "
-                            "files [default: %default]"))
-    parser.add_option("-m", "--master-template", metavar="FILE",
-                      help="use FILE as master template [default: %default]")
-    parser.add_option("-s", "--autogen-suffix", metavar="SUFFIX",
-                      help=("suffix for auto-generated files "
+    parser.add_option("-n", "--independent", metavar="PACKAGE",
+                      action="append",
+                      help=("generate independent style file for package "
+                            "PACKAGE [default: %default]"))
+    parser.add_option("-b", "--bundle", metavar="NAME",
+                      help=("use NAME as name for bundle style file "
                             "[default: %default]"))
+    parser.add_option("-s", "--autogen-suffix", metavar="SUFFIX",
+                      help=("suffix for generated style files "
+                            "[default: %default]"))
+    parser.add_option("-t", "--template", metavar="FILE",
+                      help=("use FILE as template for style "
+                            "files [default: %default]"))
     parser.add_option("-w", "--indent", type="int", metavar="NUM",
                       help=("add NUM space character at the beginning "
                             "of each line [default: %default]"))
-    parser.set_defaults(input_dir=get_input_dir(),
+    parser.set_defaults(log_level=logging.WARNING,
+                        input_dir=get_input_dir(),
                         output_dir=get_output_dir(),
-                        autogen_template=get_autogen_template(),
-                        master_template=get_master_template(),
-                        autogen_suffix="-autogen",
-                        indent=5,
-                        log_level=logging.WARNING)
+                        independent=["expl3", "l3names"],
+                        bundle="latex3",
+                        suffix="-autogen",
+                        template=get_template(),
+                        indent=5)
     options, args = parser.parse_args()
     app = Application(options)
     app.run()

@@ -19,11 +19,8 @@
 ;; IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "l3names-autogen"
+ "$name$suffix"
  (function
   (lambda ()
     (TeX-add-symbols
-     "ExplSyntaxOn"
-     "ExplSyntaxOff"
-     "ExplSyntaxNamesOn"
-     "ExplSyntaxNamesOff"))))
+$symbols))))
