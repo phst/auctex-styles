@@ -19,18 +19,20 @@
 ;; IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "infwarerr"
+ "kvsetkeys"
  (function
   (lambda ()
-    (apply
-     'TeX-add-symbols
-     (append
-      (apply
-       'append
-       (mapcar
-        '(lambda (source)
-           (mapcar
-            '(lambda (type) (concat "@" source type))
-            '("Info" "InfoNoLine" "Warning" "WarningNoLine" "Error")))
-        '("Package" "Class")))
-      '("@ehc" "@ehd"))))))
+    (TeX-run-style-hooks "infwarerr" "etexcmds")
+    (TeX-add-symbols
+     '("kv@normalize" t)
+     "kv@list"
+     '("kv@parse" t "processor")
+     '("kv@parse@normalized" t "processor")
+     "kv@key" "kv@value"
+     '("kv@processor@default" "family" "key" "value")
+     '("kv@set@family@handler" "family" t)
+     '("kvsetkeys" "family" t)
+     '("comma@normalize" t)
+     '("comma@parse" t "processor")
+     '("comma@parse@normalized" t "processor")
+     "comma@entry"))))

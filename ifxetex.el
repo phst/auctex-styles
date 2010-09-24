@@ -19,18 +19,7 @@
 ;; IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "infwarerr"
+ "ifxetex"
  (function
   (lambda ()
-    (apply
-     'TeX-add-symbols
-     (append
-      (apply
-       'append
-       (mapcar
-        '(lambda (source)
-           (mapcar
-            '(lambda (type) (concat "@" source type))
-            '("Info" "InfoNoLine" "Warning" "WarningNoLine" "Error")))
-        '("Package" "Class")))
-      '("@ehc" "@ehd"))))))
+    (TeX-add-symbols "ifxetex" "RequireXeTeX"))))

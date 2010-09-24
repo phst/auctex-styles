@@ -19,18 +19,28 @@
 ;; IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "infwarerr"
+ "pdftexcmds"
  (function
   (lambda ()
-    (apply
-     'TeX-add-symbols
-     (append
-      (apply
-       'append
-       (mapcar
-        '(lambda (source)
-           (mapcar
-            '(lambda (type) (concat "@" source type))
-            '("Info" "InfoNoLine" "Warning" "WarningNoLine" "Error")))
-        '("Package" "Class")))
-      '("@ehc" "@ehd"))))))
+    (TeX-run-style-hooks "infwarerr" "ifluatex" "ltxcmds" "luatex-loader")
+    (TeX-add-symbols
+     '("pdf@strcmp" "String-A" "String-B")
+     '("pdf@unescapehex" "String")
+     '("pdf@escapehex" "String")
+     '("pdf@escapestring" "String")
+     '("pdf@escapename" "String")
+     '("pdf@filesize" TeX-arg-file)
+     '("pdf@filemoddate" TeX-arg-file)
+     '("pdf@filedump" "Offset" "Length" TeX-arg-file)
+     '("pdf@mdfivesum" "String")
+     '("pdf@filemdfivesum" TeX-arg-file)
+     "pdf@shellescape"
+     '("pdf@system" "Command line")
+     '("pdf@primitive" TeX-arg-macro)
+     '("pdf@ifprimitive" TeX-arg-macro)
+     '("pdf@isprimitive" TeX-arg-macro TeX-arg-macro "True code" "False code")
+     '("pdf@unescapehexnative" "String")
+     '("pdf@escapehexnative" "String")
+     '("pdf@escapenamenative" "String")
+     '("pdf@mdfivesumnative" "String")
+     '("pdf@pipe" "Command line")))))

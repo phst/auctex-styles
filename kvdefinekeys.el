@@ -19,18 +19,8 @@
 ;; IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "infwarerr"
+ "kvdefinekeys"
  (function
   (lambda ()
-    (apply
-     'TeX-add-symbols
-     (append
-      (apply
-       'append
-       (mapcar
-        '(lambda (source)
-           (mapcar
-            '(lambda (type) (concat "@" source type))
-            '("Info" "InfoNoLine" "Warning" "WarningNoLine" "Error")))
-        '("Package" "Class")))
-      '("@ehc" "@ehd"))))))
+    (TeX-run-style-hooks "ltxcmds")
+    (TeX-add-symbols '("kv@define@key" "family" "key" ["default"])))))

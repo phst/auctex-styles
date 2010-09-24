@@ -19,18 +19,27 @@
 ;; IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "infwarerr"
+ "colonequals"
  (function
   (lambda ()
     (apply
      'TeX-add-symbols
      (append
+      '("ratio" "proportion")
       (apply
        'append
        (mapcar
-        '(lambda (source)
+        (lambda (symbol)
+          (apply
+           'append
            (mapcar
-            '(lambda (type) (concat "@" source type))
-            '("Info" "InfoNoLine" "Warning" "WarningNoLine" "Error")))
-        '("Package" "Class")))
-      '("@ehc" "@ehd"))))))
+            (lambda (transform)
+              (mapcar
+               (lambda (colons)
+                 (apply
+                  'concat
+                  (funcall transform (list colons symbol))))
+               '("colon" "coloncolon")))
+            '(identity reverse))))
+        '("equals" "minus" "approx" "sim")))
+      '("colonsep" "doublecolonsep"))))))

@@ -19,18 +19,6 @@
 ;; IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "infwarerr"
+ "luatex-loader"
  (function
-  (lambda ()
-    (apply
-     'TeX-add-symbols
-     (append
-      (apply
-       'append
-       (mapcar
-        '(lambda (source)
-           (mapcar
-            '(lambda (type) (concat "@" source type))
-            '("Info" "InfoNoLine" "Warning" "WarningNoLine" "Error")))
-        '("Package" "Class")))
-      '("@ehc" "@ehd"))))))
+  (lambda ())))

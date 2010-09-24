@@ -19,18 +19,12 @@
 ;; IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "infwarerr"
+ "hologo"
  (function
   (lambda ()
-    (apply
-     'TeX-add-symbols
-     (append
-      (apply
-       'append
-       (mapcar
-        '(lambda (source)
-           (mapcar
-            '(lambda (type) (concat "@" source type))
-            '("Info" "InfoNoLine" "Warning" "WarningNoLine" "Error")))
-        '("Package" "Class")))
-      '("@ehc" "@ehd"))))))
+    (TeX-run-style-hooks
+     "ltxcmds" "infwarerr" "kvsetkeys" "kvdefinekeys" "pdftexcmds"
+     "ifpdf" "ifluatex" "ifxetex" "ifvtex")
+    (TeX-add-symbols
+     '("hologo" "name") '("Hologo" "name")
+     '("hologoSetup" t) '("hologoLogoSetup" "name" t)))))

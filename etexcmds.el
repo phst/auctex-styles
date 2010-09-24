@@ -19,18 +19,10 @@
 ;; IN THE SOFTWARE.
 
 (TeX-add-style-hook
- "infwarerr"
+ "etexcmds"
  (function
   (lambda ()
-    (apply
-     'TeX-add-symbols
-     (append
-      (apply
-       'append
-       (mapcar
-        '(lambda (source)
-           (mapcar
-            '(lambda (type) (concat "@" source type))
-            '("Info" "InfoNoLine" "Warning" "WarningNoLine" "Error")))
-        '("Package" "Class")))
-      '("@ehc" "@ehd"))))))
+    (TeX-run-style-hooks "infwarerr")
+    (TeX-add-symbols
+     "etex@unexpanded" "ifetex@unexpanded"
+     "etex@expanded" "ifetex@expanded"))))
