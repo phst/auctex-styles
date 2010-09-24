@@ -31,6 +31,6 @@
         '(lambda (source)
            (mapcar
             '(lambda (type) (concat "@" source type))
-            '("Info" "InfoNoLine" "Warning" "WarningNoLine" "Error"))))
-       '("Package" "Class")))
-      '("@ehc" "@ehd")))))
+            '("Info" "InfoNoLine" "Warning" "WarningNoLine" "Error")))
+        '("Package" "Class")))
+      '("@ehc" "@ehd"))))))
