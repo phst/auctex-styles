@@ -68,8 +68,8 @@
                (lambda (scope)
                  (list (concat (car syntax) type scope "def") (cdr syntax) t))
                '("" "g")))
-            '(("" . TeX-arg-macro) ("cs" . "csname")))
-           '("num" "dim" "glue" "mu")))))
+            '(("" . TeX-arg-macro) ("cs" . "csname")))))
+        '("num" "dim" "glue" "mu")))
       '(("expandonce" TeX-arg-macro)
         ("csexpandonce" "csname"))
       (apply
@@ -98,7 +98,7 @@
         ("ifpatchable*" TeX-arg-macro "true" "false"))
       (mapcar
        (lambda (position)
-         (list (concat position "tocmd") TeX-arg-macro "success" "failure"))
+         (list (concat position "tocmd") 'TeX-arg-macro "success" "failure"))
        '("app" "pre"))
       '("tracingpatches")
       (apply
@@ -133,10 +133,10 @@
                (list
                 (concat "if" (car syntax) (car temp))
                 (cdr syntax)
-                (append (eval (cdr temp)) '("true" "false")))
-               '(("def" . TeX-arg-macro) ("cs" . "csname"))))))
+                (eval (cdr temp)) "true" "false"))
+             '(("def" . TeX-arg-macro) ("cs" . "csname")))))
         '("macro" "param" "prefix" "protected" "ltxprotect" "empty" "void"
-          ("equal" (cdr syntax)) ("string" "string"))))
+          ("equal" (lambda () (cdr syntax))) ("string" (lambda () "string")))))
       '(("ifstrequal" "string-1" "string-2" "true" "false")
         ("ifstrempty" "true" "false")
         ("ifblank" "true" "false")
