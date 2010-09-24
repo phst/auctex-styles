@@ -22,6 +22,7 @@
  "etoolbox"
  (function
   (lambda ()
+    (TeX-run-style-hooks "etex")
     (apply
      'TeX-add-symbols
      (append
